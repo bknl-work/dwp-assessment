@@ -21,13 +21,18 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
-        validateInputs(accountId, ticketTypeRequests);
+        try {
+            validateInputs(accountId, ticketTypeRequests);
 
-        int cost = calculateCost(ticketTypeRequests);
-        int seats = calculateSeats(ticketTypeRequests);
+            int cost = calculateCost(ticketTypeRequests);
+            int seats = calculateSeats(ticketTypeRequests);
 
-        processPayment(accountId, cost);
-        reserveSeats(accountId, seats);
+            processPayment(accountId, cost);
+            reserveSeats(accountId, seats);
+        }
+        catch (InvalidPurchaseException e) {
+            throw e;
+        }
     }
 
     private void validateInputs(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
